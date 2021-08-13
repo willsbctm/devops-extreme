@@ -10,19 +10,16 @@ kubectl create namespace manual
 ```
 kubectl apply -f ./deploy-tradicional.yaml
 ```
-OBS: deploy-tradicional.yaml
 
 - Verificar histórico
 ```
-
 kubectl rollout history deployment/deploy-manual
 ```
 
 - Rollback
 ```
-kubectl rollout history deployment/deploy-manual
+kubectl rollout undo deployment/deploy-manual --to-revision 1
 ```
-
 
 ## Lab 2
 - Criar namespace
@@ -36,35 +33,6 @@ Passos:
 helm repo add bitnami https://charts.bitnami.com/bitnami
 ```
 
-- Instalar o chart do rabbitmq
-```
-helm install antifa bitnami/rabbitmq --set image.repository=rabbitmq --set image.tag=management
-```
-OBS: https://github.com/bitnami/charts/tree/master/bitnami/rabbitmq
-
-- Acessando RabbitMq
-```
-kubectl port-forward svc/antifa-rabbitmq 8085:15672
-```
-
-- Verificando instalação do chart
-```
-helm list
-helm history antifa
-```
-
-- Desinstalando RabbitMq
-```
-helm uninstall antifa
-```
-
-- Removendo repositorio
-```
-helm repo remove bitnami
-```
-
-## Lab 3
-
 - Instalar grafana
 ```
 helm install democracia bitnami/grafana --set admin.password=@1234
@@ -76,55 +44,29 @@ OBS: https://github.com/bitnami/charts/tree/master/bitnami/rabbitmq
 kubectl port-forward svc/democracia-grafana 8086:3000
 ```
 
-- Tentar instalar novamente
-
 - Realizar um upgrade
 ```
-helm upgrade democracia bitnami/grafana --set admin.password=@1234 --set replicaCount=2 --set service.type=LoadBalancer
-```
-
-- Verificar grafana
-```
-127.0.0.1:3000
-```
-
-- Realizar outro upgrade
-```
-helm upgrade democracia bitnami/grafana --set admin.password=@1234 --set replicaCount=2
-```
-
-- Verificar valores perdidos
-
-- Realizar outro upgrade
-```
-helm upgrade democracia bitnami/grafana --set admin.password=@1234 --set replicaCount=2 --set service.type=LoadBalancer
-```
-
-- Reutilizar valores
-```
-helm upgrade democracia bitnami/grafana --reuse-values --set replicaCount=1
-```
-
-- Verificar valores alterados
-
-- Instalar/atualizar
-```
-helm upgrade --install democracia bitnami/rabbitmq --reuse-values
-```
-
-- Desinstalar
-```
-helm uninstall democracia --keep-history
+helm upgrade --install democracia bitnami/grafana --set admin.password=@1234 --set replicaCount=2
 ```
 
 - Visualizar e rollback
 ```
-helm list -A
-helm democracia antifa 1
+helm list
+helm rollback democracia 1
+```
+
+- Desinstalar
+```
+helm uninstall democracia
 ```
 
 
-## Lab 4
+## Lab 3
+- Criar namespace
+```
+kubectl create namespace democracia
+```
+
 - Criando chart
 ```
 helm create minnie
@@ -136,10 +78,12 @@ helm create minnie
 
 - Instalando
 ```
+helm upgrade --install minninha . --dry-run
 helm upgrade --install minninha .
 ```
+OBS: Enfatizar como obter valores. Falar sobre valores pré-definidos
 
-- Informando novo valor com -f 
+- Informando novo valor com -f (monstrar values)
 ```
 helm upgrade --install minninha . -f ./values.yaml
 ```
@@ -149,21 +93,25 @@ helm upgrade --install minninha . -f ./values.yaml
 helm upgrade --install minninha . -f values.yaml --set env.versao=cmd
 ```
 
-- Observando funcões do helm
+- Observando funcões
+    - If
+    - Range
+    - With
+    - Variável
 
-- Observando go templates
-
-## Lab 5
+## Lab 4
 - Empacotando
 ```
 helm package minninha .
 ```
 
 - Criando repo 
-    - Criar repositório no github (extreme)
+    - Criar repositório no github (helm-repo)
     - Criar branch
     - Alterar branch em pages pra /docs
     - Verificar se está com forçar https
+    - Criar arquivo index dentro da pastas docs
+        helm repo index docs
 
 - Publicando pacote
     - clonar repo
@@ -174,7 +122,7 @@ helm package minninha .
 
 - Adicionando repo
 ```
-helm repo add extreme https://github.com/willsbctm/extreme
+helm repo add extreme https://github.com/willsbctm/helm-repo
 ```
 
 - Instalando chart
@@ -182,7 +130,7 @@ helm repo add extreme https://github.com/willsbctm/extreme
 helm install minninha extreme/minnie
 ```
 
-## Lab 6
+## Lab 5
 - Observar webhook de teste
 
 - Rodar teste
