@@ -1,0 +1,52 @@
+# Deploy tradicional
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: example-config
+data:
+  minhaconfig: configzera
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-manual
+  labels:
+    app: webapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: minha-app
+        image: training/webapp
+        ports:
+        - containerPort: 5000
+        env:
+        - name: environment
+          value: dev
+        - name: minhaconfig
+          valueFrom:
+            configMapKeyRef:
+              name: example-config
+              key: minhaconfig
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: deploy-manual
+spec:
+  selector:
+    app: webapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
