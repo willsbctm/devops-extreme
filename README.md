@@ -1,16 +1,16 @@
 # Exemplos
 
 ## Lab 1
-- Crar namespace
+- Criar namespace
 ```
 kubectl create namespace manual
 ``` 
 
 - Aplicar criação de objetos
 ```
-kubectl apply -f <caminho>/deploy-tradicional.yaml
+kubectl apply -f ./deploy-tradicional.yaml
 ```
-OBS: /mnt/c/Users/william.espinosa/OneDrive/DevOpsExtreme/deploy-tradicional.yaml
+OBS: deploy-tradicional.yaml
 
 - Verificar histórico
 ```
@@ -36,7 +36,7 @@ Passos:
 helm repo add bitnami https://charts.bitnami.com/bitnami
 ```
 
-- Instalar o chart do grafana
+- Instalar o chart do rabbitmq
 ```
 helm install antifa bitnami/rabbitmq --set image.repository=rabbitmq --set image.tag=management
 ```
@@ -69,6 +69,7 @@ helm repo remove bitnami
 ```
 helm install democracia bitnami/grafana --set admin.password=@1234
 ```
+OBS: https://github.com/bitnami/charts/tree/master/bitnami/rabbitmq
 
 - Verificar grafana
 ```
@@ -140,7 +141,7 @@ helm upgrade --install minninha .
 
 - Informando novo valor com -f 
 ```
-helm upgrade --install minninha . -f values.yaml
+helm upgrade --install minninha . -f ./values.yaml
 ```
 
 - Informando novo valor com --set env.versao=v2
@@ -155,7 +156,7 @@ helm upgrade --install minninha . -f values.yaml --set env.versao=cmd
 ## Lab 5
 - Empacotando
 ```
-helm package minninha
+helm package minninha .
 ```
 
 - Criando repo 
@@ -178,7 +179,7 @@ helm repo add extreme https://github.com/willsbctm/extreme
 
 - Instalando chart
 ```
-h install minninha extreme/minnie
+helm install minninha extreme/minnie
 ```
 
 ## Lab 6
@@ -188,11 +189,3 @@ h install minninha extreme/minnie
 ```
 helm teste minninha
 ```
-
-
-
-
-
-
-
-
