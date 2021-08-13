@@ -6,6 +6,7 @@ metadata:
   name: example-config
 data:
   minhaconfig: configzera
+  config: '2'
 ---
 
 apiVersion: apps/v1
@@ -15,7 +16,7 @@ metadata:
   labels:
     app: webapp
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: webapp
@@ -23,6 +24,7 @@ spec:
     metadata:
       labels:
         app: webapp
+        teste: oi
     spec:
       containers:
       - name: minha-app
